@@ -1,9 +1,6 @@
 'use strict';
 
-const got = require('got');
 const uniqueRandomArray = require('unique-random-array');
-const EventEmitter = require('eventemitter3');
-
 const randomCache = {};
 
 function formatResult(getRandomImage) {
@@ -11,7 +8,7 @@ function formatResult(getRandomImage) {
     if (!imageData) {
         return;
     }
-    return `http://imgur.com/${imageData.hash}${imageData.ext.replace(/\?.*/, '')}`;
+    return `https://imgur.com/${imageData.hash}${imageData.ext.replace(/\?.*/, '')}`;
 }
 
 function storeResults(images, subreddit) {
@@ -21,51 +18,33 @@ function storeResults(images, subreddit) {
     return getRandomImage;
 }
 
-function randomPuppy(subreddit) {
-    subreddit = (typeof subreddit === 'string' && subreddit.length !== 0) ? subreddit : 'puppies';
+function randomFrog(subreddit, cacheURL) {
+    subreddit = (typeof subreddit === 'string' && subreddit.length !== 0) ? subreddit : 'frogs';
 
     if (randomCache[subreddit]) {
         return Promise.resolve(formatResult(randomCache[subreddit]));
     }
 
-    return got(`https://imgur.com/r/${subreddit}/hot.json`, {json: true})
+    var url = typeof cacheURL === 'string' ? cacheURL : `https://imgur.com/r/${subreddit}/hot.json`;
+    return require('got')(url, {json: true})
         .then(response => storeResults(response.body.data, subreddit))
         .then(getRandomImage => formatResult(getRandomImage));
 }
 
-// silly feature to play with observables
-function all(subreddit) {
-    const eventEmitter = new EventEmitter();
-
-    function emitRandomImage(subreddit) {
-        randomPuppy(subreddit).then(imageUrl => {
-            eventEmitter.emit('data', imageUrl + '#' + subreddit);
-            if (eventEmitter.listeners('data').length) {
-                setTimeout(() => emitRandomImage(subreddit), 200);
-            }
-        });
-    }
-
-    emitRandomImage(subreddit);
-    return eventEmitter;
-}
-
-function callback(subreddit, cb) {
-    randomPuppy(subreddit)
+function callback(subreddit, cb, cacheURL) {
+    randomFrog(subreddit, cacheURL)
         .then(url => cb(null, url))
         .catch(err => cb(err));
 }
 
 // subreddit is optional
 // callback support is provided for a training exercise
-module.exports = (subreddit, cb) => {
+module.exports = (subreddit, cb, cacheURL) => {
     if (typeof cb === 'function') {
-        callback(subreddit, cb);
+        callback(subreddit, cb, cacheURL);
     } else if (typeof subreddit === 'function') {
-        callback(null, subreddit);
+        callback(null, subreddit, cacheURL);
     } else {
-        return randomPuppy(subreddit);
+        return randomFrog(subreddit, cacheURL);
     }
 };
-
-module.exports.all = all;
