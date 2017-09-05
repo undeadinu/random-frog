@@ -8,7 +8,7 @@ function formatResult(getRandomImage) {
     if (!imageData) {
         return;
     }
-    return `https://imgur.com/${imageData.hash}${imageData.ext.replace(/\?.*/, '')}`;
+    return `https://imgur.com/${imageData.is_album ? imageData.album_cover : imageData.hash}${imageData.ext.replace(/\?.*/, '')}`;
 }
 
 function storeResults(images, subreddit) {
