@@ -13,7 +13,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "test": "xo && ava",
+    "test": "standard && ava",
     "watch": "ava --watch"
   },
   "files": [
@@ -25,16 +25,11 @@
     "random"
   ],
   "dependencies": {
-    "eventemitter3": "^1.2.0",
-    "got": "^6.3.0",
-    "unique-random-array": "^1.0.0"
+    "unique-random-array": "^1.0.0",
+    "xhr": "^2.4.0"
   },
   "devDependencies": {
     "ava": "^0.14.0",
-    "rx-lite": "^4.0.8",
-    "xo": "^0.14.0"
-  },
-  "xo": {
-    "space": 4
+    "standard": "^10.0.3"
   }
 }
