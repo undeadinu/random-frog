@@ -31,5 +31,8 @@
   "devDependencies": {
     "ava": "^0.14.0",
     "standard": "^10.0.3"
+  },
+  "browser": {
+    "request": "xhr"
   }
 }
