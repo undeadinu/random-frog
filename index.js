@@ -34,15 +34,15 @@ function randomFrog (subreddit, cacheURL) {
       resolve(body.data)
     })
   })
-  return p.then(data => storeResults(data, subreddit))
-        .then(getRandomImage => formatResult(getRandomImage))
-        .catch(err => { throw err })
+  return p.then(function (data) { return storeResults(data, subreddit) })
+        .then(function (getRandomImage) { return formatResult(getRandomImage) })
+        .catch(function (err) { throw err })
 }
 
 function callback (subreddit, cb, cacheURL) {
   randomFrog(subreddit, cacheURL)
-        .then(url => cb(null, url))
-        .catch(err => cb(err))
+        .then(function (url) { return cb(null, url) })
+        .catch(function (err) { return cb(err) })
 }
 
 // subreddit is optional
