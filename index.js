@@ -4,14 +4,6 @@ const uniqueRandomArray = require('unique-random-array')
 const xhr = require('request')
 const randomCache = {}
 
-function formatResult (getRandomImage) {
-  const imageData = getRandomImage()
-  if (!imageData) {
-    return
-  }
-  return `https://imgur.com/${imageData.is_album ? imageData.album_cover : imageData.hash}${imageData.ext.replace(/\?.*/, '')}`
-}
-
 function storeResults (images, subreddit) {
   const getRandomImage = uniqueRandomArray(images)
 
@@ -23,7 +15,7 @@ function randomFrog (subreddit, cacheURL) {
   subreddit = (typeof subreddit === 'string' && subreddit.length !== 0) ? subreddit : 'frogs'
 
   if (randomCache[subreddit]) {
-    return Promise.resolve(formatResult(randomCache[subreddit]))
+    return Promise.resolve(randomCache[subreddit]())
   }
 
   var url = typeof cacheURL === 'string' ? cacheURL : `https://imgur.com/r/${subreddit}/hot.json`
@@ -35,7 +27,7 @@ function randomFrog (subreddit, cacheURL) {
     })
   })
   return p.then(function (data) { return storeResults(data, subreddit) })
-        .then(function (getRandomImage) { return formatResult(getRandomImage) })
+        .then(function (getRandomImage) { return getRandomImage() })
         .catch(function (err) { throw err })
 }
 

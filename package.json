@@ -1,7 +1,7 @@
 {
   "name": "random-frog",
   "version": "1.2.2",
-  "description": "Get a random imgur image url, by default a frog.",
+  "description": "Get a random imgur image data.",
   "license": "MIT",
   "repository": "srilq/random-frog",
   "author": {

@@ -2,28 +2,16 @@
 
 Fork of [dylang/random-puppy](https://github.com/dylang/random-puppy)
 
-> Get a random frog image url.
-
-<img src="http://i.imgur.com/0zZ8m6B.jpg" width="300px">
-
-## Install
-
-```
-$ npm install --save random-frog
-```
-
+> Get a random frog image.
 
 ## Usage
 
 ```js
-const randomFrog = require('random-frog');
+const randomFrog = require('random-frog')
 
-randomFrog()
-    .then(url => {
-        console.log(url);
-    })
+randomFrog().then(data => console.log(data.hash))
 
-//=> 'http://imgur.com/IoI8uS5.jpg'
+// => 'IoI8uS5'
 ```
 
 
